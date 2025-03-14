@@ -11,4 +11,7 @@ public class PlayerStatSO : ScriptableObject
     [Header("Combat")]
     public float MaxHP;
     public float InvincibleTime;
+
+    [Header("Exp")]
+    public int NeedExpPerLevel;
 }
