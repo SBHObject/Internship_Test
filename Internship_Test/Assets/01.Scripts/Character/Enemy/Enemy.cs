@@ -6,15 +6,17 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField]
-    public MonsterDataSO Data { get; private set; }
+    private MonsterDataSO data;
+    public MonsterDataSO Data { get { return data; } }
+
     private EnemyStateMachine stateMachine;
 
     public Rigidbody2D rb {  get; private set; }
 
-    public PlayerCharacter player { get; private set; }
+    public PlayerCharacter Player { get; private set; }
 
-    public float toPlayerDistance { get; private set; }
-    public Vector2 toPlayerDir { get; private set; }
+    public float ToPlayerDistance { get; private set; }
+    public Vector2 ToPlayerDir { get; private set; }
 
     private float distanceCheckTime = 0.5f;
     private float checkTimer = 0;
@@ -27,29 +29,49 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
+        Player = GamePlayManager.Instance.playerChar;
+        ActiveMonster();
         CheckDistance();
     }
 
     private void Update()
     {
-        stateMachine.Update(Time.deltaTime);
-
-        checkTimer += Time.deltaTime;
-        if(checkTimer >= distanceCheckTime)
+        if (stateMachine.CurrentState == stateMachine.ChaseState || stateMachine.CurrentState == stateMachine.AttackState)
         {
-            CheckDistance();
-            checkTimer = 0;
+            checkTimer += Time.deltaTime;
+            if (checkTimer >= distanceCheckTime)
+            {
+                CheckDistance();
+                checkTimer = 0;
+            }
         }
+
+        stateMachine.Update(Time.deltaTime);
     }
 
-    private void CheckDistance()
+    private void FixedUpdate()
     {
-        toPlayerDir = player.transform.position - transform.position;
-        toPlayerDistance = toPlayerDir.sqrMagnitude;
+        stateMachine.FixedUpdate();
+    }
+
+    public void CheckDistance()
+    {
+        ToPlayerDir = Player.transform.position - transform.position;
+        ToPlayerDistance = ToPlayerDir.sqrMagnitude;
     }
 
     public virtual void TryAttack()
     {
 
+    }
+
+    public void SetTarget()
+    {
+        Player = GamePlayManager.Instance.playerChar;
+    }
+
+    private void ActiveMonster()
+    {
+        stateMachine.ChangeState(stateMachine.ChaseState);
     }
 }

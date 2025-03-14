@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyAttackState : State
 {
     private float attackDelay;
+    private float attackRange;
 
     public EnemyAttackState(EnemyStateMachine stateMachine, Enemy enemy) : base(stateMachine, enemy)
     {
@@ -12,7 +13,7 @@ public class EnemyAttackState : State
 
     public override void OnEnter()
     {
-
+        attackRange = enemy.Data.AttackRange * enemy.Data.AttackRange;
     }
 
     public override void OnUpdate(float deltaTime)
@@ -22,6 +23,11 @@ public class EnemyAttackState : State
         if(enemy.Data.AttackSpeed <= attackDelay)
         {
             enemy.TryAttack();
+        }
+
+        if(enemy.ToPlayerDistance > attackRange)
+        {
+            stateMachine.ChangeState(stateMachine.ChaseState);
         }
     }
 

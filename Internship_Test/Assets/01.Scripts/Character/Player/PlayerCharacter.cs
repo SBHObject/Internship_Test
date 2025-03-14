@@ -11,9 +11,16 @@ public class PlayerCharacter : MonoBehaviour
     public PlayerContoller Controller { get; private set; }
     public InputController InputController { get; private set; }
 
+    public bool IsAlive { get; private set; } = true;
+
     private void Awake()
     {
         Controller = GetComponent<PlayerContoller>();
         InputController = GetComponent<InputController>();
+    }
+
+    public void Death()
+    {
+        IsAlive = false;
     }
 }
