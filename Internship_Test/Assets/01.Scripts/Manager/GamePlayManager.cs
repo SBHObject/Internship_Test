@@ -26,7 +26,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
     public void Start()
     {
-        SetGamePlay();
+        //SetGamePlay();
     }
 
     private void Update()
@@ -51,11 +51,11 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
     public void SetGamePlay()
     {
-        PlayerCharacter player = ResourceManager.Instance.LoadResource<PlayerCharacter>("PlayerCharacter", EMajorType.Prefab, ESubType.Character);
+        PlayerCharacter player = ResourceManager.Instance.LoadResource<PlayerCharacter>("PlayerCharacter", EMajorType.Prefab, ESubType.Player);
 
         playerChar = Instantiate(player, Vector3.zero, Quaternion.identity);
 
-        Enemy monster = ResourceManager.Instance.LoadResource<Enemy>("Zombie", EMajorType.Prefab, ESubType.Character);
+        Enemy monster = ResourceManager.Instance.LoadResource<Enemy>("Zombie", EMajorType.Prefab, ESubType.Enemy);
         Instantiate(monster, Vector3.zero, Quaternion.identity);
     }
 }

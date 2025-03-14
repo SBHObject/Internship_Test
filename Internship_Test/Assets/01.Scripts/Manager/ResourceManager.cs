@@ -12,7 +12,8 @@ public enum EMajorType
 public enum ESubType
 {
     Item,
-    Character,
+    Enemy,
+    Player,
     UI,
     None
 }
@@ -35,7 +36,7 @@ public class ResourceManager : PersistentSingleton<ResourceManager>
         //리소스풀 딕셔너리 확인
         if (!resourcePool.ContainsKey(stringBuilder.ToString()))
         {
-            var targetResource = Resources.Load (stringBuilder.ToString(), typeof(T));
+            var targetResource = Resources.Load(stringBuilder.ToString(), typeof(T));
 
             if(targetResource == null)
             {
@@ -48,5 +49,32 @@ public class ResourceManager : PersistentSingleton<ResourceManager>
         //대상 반환
         returnAsset = (T)resourcePool[stringBuilder.ToString()];
         return returnAsset;
+    }
+
+    public List<T> LoadAllResources<T>(EMajorType majorType, ESubType subType = ESubType.None)
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.Append(majorType);
+        stringBuilder.Append(subType == ESubType.None ? "" : $"/{subType}");
+
+        object[] loaded = Resources.LoadAll(stringBuilder.ToString(), typeof(T));
+
+        List<T> returnResource = new List<T>();
+
+        foreach( object obj in loaded )
+        {
+            StringBuilder key = new StringBuilder();
+            key.Append(stringBuilder.ToString());
+            key.Append($"/");
+            key.Append(obj.ToString());
+            key.Replace($" ({obj.GetType()})", "");
+
+            resourcePool.Add(key.ToString(), obj);
+
+            returnResource.Add((T)obj);
+        }
+
+        return returnResource;
     }
 }

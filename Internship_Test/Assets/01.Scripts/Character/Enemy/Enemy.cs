@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, IDamageable
+public class Enemy : ObjectPoolable, IDamageable
 {
     //몬스터 데이터
     [SerializeField]
@@ -99,5 +99,10 @@ public class Enemy : MonoBehaviour, IDamageable
         {
             stateMachine.ChangeState(stateMachine.DeathState);
         }
+    }
+
+    public override void GetObject()
+    {
+        //TODO : 오브젝트풀 생성 구현
     }
 }
