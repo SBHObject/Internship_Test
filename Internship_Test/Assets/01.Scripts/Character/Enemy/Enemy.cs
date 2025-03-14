@@ -12,6 +12,9 @@ public class Enemy : MonoBehaviour
     private EnemyStateMachine stateMachine;
 
     public Rigidbody2D rb {  get; private set; }
+    [SerializeField]
+    private SpriteRenderer sprite;
+    public SpriteRenderer Sprite { get { return sprite; } }
 
     public PlayerCharacter Player { get; private set; }
 
@@ -52,6 +55,14 @@ public class Enemy : MonoBehaviour
     private void FixedUpdate()
     {
         stateMachine.FixedUpdate();
+        if (rb.velocity.x > 0)
+        {
+            Sprite.flipX = false;
+        }
+        else if (rb.velocity.x < 0)
+        {
+            Sprite.flipX = true;
+        }
     }
 
     public void CheckDistance()

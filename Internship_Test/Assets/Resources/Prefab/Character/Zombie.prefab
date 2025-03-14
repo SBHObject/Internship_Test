@@ -180,3 +180,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 1fdcea1ffd88fd34ca20cb7220f95a59, type: 2}
+  sprite: {fileID: 536698981433597434}

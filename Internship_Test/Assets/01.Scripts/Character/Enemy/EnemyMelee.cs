@@ -6,6 +6,6 @@ public class EnemyMelee : Enemy
 {
     public override void TryAttack()
     {
-        
+        Debug.Log("АјАн");
     }
 }

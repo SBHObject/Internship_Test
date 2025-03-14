@@ -23,6 +23,7 @@ public class EnemyAttackState : State
         if(enemy.Data.AttackSpeed <= attackDelay)
         {
             enemy.TryAttack();
+            attackDelay = 0;
         }
 
         if(enemy.ToPlayerDistance > attackRange)

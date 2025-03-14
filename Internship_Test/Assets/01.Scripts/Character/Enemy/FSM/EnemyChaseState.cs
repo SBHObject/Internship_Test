@@ -16,7 +16,6 @@ public class EnemyChaseState : State
         }
 
         Debug.Log("추적 진입");
-        Debug.Log(enemy.Player);
         enemy.CheckDistance();
     }
 
