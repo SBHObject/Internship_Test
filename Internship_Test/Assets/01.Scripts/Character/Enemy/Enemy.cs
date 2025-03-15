@@ -17,6 +17,7 @@ public class Enemy : ObjectPoolable, IDamageable
     public SpriteRenderer Sprite { get { return sprite; } }
     public Rigidbody2D rb {  get; private set; }
     public BoxCollider2D MonsterCollider { get; private set; }
+    public Animator Animator { get; private set; }
 
     //공격대상 관련 필드
     public PlayerCharacter Player => GamePlayManager.Instance.playerChar;
@@ -31,11 +32,17 @@ public class Enemy : ObjectPoolable, IDamageable
     [SerializeField]
     private Transform dropPosition;
 
+    private bool isDead = false;
+
+    private Coroutine hitAni;
+    private WaitForSeconds aniTime = new WaitForSeconds(0.2f);
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         stateMachine = new EnemyStateMachine(this);
         MonsterCollider = GetComponent<BoxCollider2D>();
+        Animator = GetComponent<Animator>();
 
         Status = new EnemyStatus(this);
     }
@@ -89,9 +96,18 @@ public class Enemy : ObjectPoolable, IDamageable
 
     public void TakeDamage(float damage)
     {
+        if (isDead) return;
+
+        if (hitAni == null)
+        {
+            hitAni = StartCoroutine(HitAnimation());
+        }
+
         //체력이 0보다 작아지면 사망처리
         if(Status.TakeDamage(damage) <= 0)
         {
+            isDead = true;
+            MonsterCollider.enabled = false;
             stateMachine.ChangeState(stateMachine.DeathState);
         }
     }
@@ -118,11 +134,19 @@ public class Enemy : ObjectPoolable, IDamageable
         rb.Sleep();
         base.ReleaseObject();
         MonsterCollider.enabled = true;
+        isDead = false;
         stateMachine.ChangeState(stateMachine.IdleState);
     }
 
     public void DropItem()
     {
         GamePlayManager.Instance.DropManager.DecideDropItem(Data.DropItem, dropPosition.position);
+    }
+
+    private IEnumerator HitAnimation()
+    {
+        Animator.SetBool("IsHit", true);
+        yield return aniTime;
+        Animator.SetBool("IsHit", false);
     }
 }

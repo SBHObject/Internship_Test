@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -30,7 +31,12 @@ public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
         }
 
         var returnObject = poolDictinary[poolKey].Get();
-        returnObject?.SetPosition(vector);
+        
+        if (returnObject != null)
+        {
+            returnObject.SetPosition(vector);
+            returnObject.Pool = returnObject;
+        }
 
         return returnObject;
     }
@@ -143,14 +149,20 @@ public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
     //풀에 오브젝트 넣기
     private void OnReleasePoolObject(ObjectPoolable poolObject)
     {
-        poolObject?.SetPosition(createPosition);
         poolObject?.ReleaseObject();
     }
 
     //풀 오브젝트 파괴
     private void OnDestroyPoolObject(ObjectPoolable poolObject)
     {
-        poolObject.DestroyObject();
-        createdObjectCount[poolObject.gameObject.name]--;
+        poolObject?.DestroyObject();
+
+        if (poolObject != null)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append(poolObject.gameObject.name);
+            stringBuilder.Replace("(Clone)", "");
+            createdObjectCount[stringBuilder.ToString()]--;
+        }
     }
 }

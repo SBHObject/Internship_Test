@@ -18,5 +18,6 @@ public class ExpItem : DropItem
     public override void ItemEffect()
     {
         GamePlayManager.Instance.playerChar.Status.GetExp(expAmount);
+        ObjectPoolingManager.Instance.ReleaseToPool(Key, Pool);
     }
 }

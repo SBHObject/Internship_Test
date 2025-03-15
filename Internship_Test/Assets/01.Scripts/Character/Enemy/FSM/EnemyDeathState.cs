@@ -7,12 +7,16 @@ public class EnemyDeathState : State
     private readonly float returnPoolTime = 1f;
     private float timer;
 
+    private int deadHesh = Animator.StringToHash("IsDead");
+
     public EnemyDeathState(EnemyStateMachine stateMachine, Enemy enemy) : base(stateMachine, enemy)
     {
     }
 
     public override void OnEnter()
     {
+        enemy.Animator.SetBool(deadHesh, true);
+        enemy.rb.velocity = Vector2.zero;
         enemy.MonsterCollider.enabled = false;
         timer = 0;
         enemy.DropItem();
@@ -30,7 +34,7 @@ public class EnemyDeathState : State
 
     public override void OnExit()
     {
-        //오브젝트풀에 넣기
-        ObjectPoolingManager.Instance.ReleaseToPool(enemy.Key, enemy);
+        enemy.Animator.SetBool(deadHesh, false);
+        ObjectPoolingManager.Instance.ReleaseToPool(enemy.Key, enemy.Pool);
     }
 }

@@ -12,6 +12,7 @@ public class PlayerCharacter : MonoBehaviour, IDamageable
 
     //실제 스텟 관리 클래스
     public PlayerStatus Status { get; private set; }
+    public PlayerWeaponSystem WeaponSystem { get; private set; }
 
     //컨트롤 관련 필드
     public PlayerContoller Controller { get; private set; }
@@ -25,6 +26,7 @@ public class PlayerCharacter : MonoBehaviour, IDamageable
     {
         Controller = GetComponent<PlayerContoller>();
         InputController = GetComponent<InputController>();
+        WeaponSystem = GetComponent<PlayerWeaponSystem>();
 
         Status = new PlayerStatus(this);
     }

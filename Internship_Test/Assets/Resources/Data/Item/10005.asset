@@ -21,7 +21,7 @@ MonoBehaviour:
   MaxHpMul: 0
   MaxMp: 0
   MaxMpMul: 0
-  MaxAtk: 30
+  MaxAtk: 50
   MaxAtkMul: 1.5
   AtkSpeed: 0.5
   AtkRange: 8

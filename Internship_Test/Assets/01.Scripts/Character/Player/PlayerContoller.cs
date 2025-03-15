@@ -13,6 +13,9 @@ public class PlayerContoller : MonoBehaviour
     private SpriteRenderer sprite;
     public bool IsFlip { get; private set; } = false;
 
+    private readonly Quaternion flip = new Quaternion(0, 180, 0, 0);
+    private readonly Quaternion NonFlip = new Quaternion(0, 0, 0, 0);
+
     private void Awake()
     {
         character = GetComponent<PlayerCharacter>();
@@ -35,12 +38,12 @@ public class PlayerContoller : MonoBehaviour
 
         if(value.x < 0)
         {
-            sprite.flipX = true;
+            sprite.gameObject.transform.rotation = flip;
             IsFlip = true;
         }
         else if(value.x > 0)
         {
-            sprite.flipX = false;
+            sprite.gameObject.transform.rotation = NonFlip;
             IsFlip = false;
         }
     }

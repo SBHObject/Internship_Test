@@ -6,6 +6,7 @@ using UnityEngine.Pool;
 public abstract class ObjectPoolable : MonoBehaviour
 {
     public string Key { get; private set; }
+    public ObjectPoolable Pool { get; set; }
 
     public abstract void GetObject();
 
@@ -17,6 +18,7 @@ public abstract class ObjectPoolable : MonoBehaviour
     public virtual void ReleaseObject()
     {
         gameObject.SetActive(false);
+        Pool = null;
     }
 
     public virtual void DestroyObject()

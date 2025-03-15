@@ -9,7 +9,6 @@ public class EnemyMelee : Enemy
 
     public override void TryAttack()
     {
-        Debug.Log("АјАн");
         attackCollider.gameObject.SetActive(true);
     }
 

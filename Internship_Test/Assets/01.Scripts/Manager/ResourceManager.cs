@@ -16,6 +16,7 @@ public enum ESubType
     Player,
     UI,
     Map,
+    Weapon,
     None
 }
 

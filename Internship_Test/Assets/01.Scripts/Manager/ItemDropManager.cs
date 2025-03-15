@@ -33,7 +33,7 @@ public class ItemDropManager
             }
             else
             {
-                other.Add(i);
+                other.Add(dropTable[i]);
             }
         }
 
@@ -52,9 +52,16 @@ public class ItemDropManager
             int target = randomNum % other.Count;
             if (unlockLevels[other[target]] >= GamePlayManager.Instance.playerChar.Status.Level)
             {
-                ChestItem chest = (ChestItem)ObjectPoolingManager.Instance.GetFromPool("Chest", SetDropPosition(dropPos));
-                ItemDataSO data = ResourceManager.Instance.LoadResource<ItemDataSO>(other[target].ToString(), EMajorType.Data, ESubType.Item);
-                chest.SetItemData(data);
+                if (other[target] / 10000 == 1)
+                {
+                    ChestItem chest = (ChestItem)ObjectPoolingManager.Instance.GetFromPool("Chest", SetDropPosition(dropPos));
+                    ItemDataSO data = ResourceManager.Instance.LoadResource<ItemDataSO>(other[target].ToString(), EMajorType.Data, ESubType.Item);
+                    chest.SetItemData(data);
+                }
+                else
+                {
+                    ObjectPoolingManager.Instance.GetFromPool(other[target].ToString(), SetDropPosition(dropPos));
+                }
             }
         }
     }
