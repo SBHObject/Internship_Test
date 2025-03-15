@@ -16,7 +16,7 @@ public class Enemy : ObjectPoolable, IDamageable
     private SpriteRenderer sprite;
     public SpriteRenderer Sprite { get { return sprite; } }
     public Rigidbody2D rb {  get; private set; }
-    private BoxCollider2D monsterCollider;
+    public BoxCollider2D MonsterCollider { get; private set; }
 
     //공격대상 관련 필드
     public PlayerCharacter Player => GamePlayManager.Instance.playerChar;
@@ -35,7 +35,7 @@ public class Enemy : ObjectPoolable, IDamageable
     {
         rb = GetComponent<Rigidbody2D>();
         stateMachine = new EnemyStateMachine(this);
-        monsterCollider = GetComponent<BoxCollider2D>();
+        MonsterCollider = GetComponent<BoxCollider2D>();
 
         Status = new EnemyStatus(this);
     }
@@ -117,7 +117,8 @@ public class Enemy : ObjectPoolable, IDamageable
     {
         rb.Sleep();
         base.ReleaseObject();
-        stateMachine.ChangeState(stateMachine.IdelState);
+        MonsterCollider.enabled = true;
+        stateMachine.ChangeState(stateMachine.IdleState);
     }
 
     public void DropItem()
