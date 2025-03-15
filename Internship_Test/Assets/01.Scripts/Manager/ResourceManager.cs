@@ -15,6 +15,7 @@ public enum ESubType
     Enemy,
     Player,
     UI,
+    Map,
     None
 }
 

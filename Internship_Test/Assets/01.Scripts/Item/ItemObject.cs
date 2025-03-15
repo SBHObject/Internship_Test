@@ -11,9 +11,4 @@ public class ItemObject : ObjectPoolable
     {
         gameObject.SetActive(true);
     }
-
-    public void SetPosition(Vector2 position)
-    {
-        transform.position = position;
-    }
 }

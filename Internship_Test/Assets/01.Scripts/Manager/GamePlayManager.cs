@@ -7,6 +7,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
 {
     //관리되는 매니저
     public ItemDropManager DropManager { get; private set; }
+    public SpawnManager SpawnManager { get; private set; }
 
     public PlayerCharacter playerChar { get; private set; }
 
@@ -23,6 +24,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
         base.Awake();
 
         DropManager = new ItemDropManager();
+        SpawnManager = new SpawnManager();
 
         IsGameStart = false;
         GamePlayTime = 0;
@@ -46,6 +48,8 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 GamePlayTime = 0;
             }
         }
+
+        SpawnManager.SpawnMonster(Time.deltaTime);
     }
 
     public void GameStart()
@@ -54,13 +58,8 @@ public class GamePlayManager : Singleton<GamePlayManager>
         IsGameStart = true;
     }
 
-    public void SetGamePlay()
+    public void SetPlayerCharacter(PlayerCharacter character)
     {
-        PlayerCharacter player = ResourceManager.Instance.LoadResource<PlayerCharacter>("PlayerCharacter", EMajorType.Prefab, ESubType.Player);
-
-        playerChar = Instantiate(player, Vector3.zero, Quaternion.identity);
-
-        Enemy monster = ResourceManager.Instance.LoadResource<Enemy>("Zombie", EMajorType.Prefab, ESubType.Enemy);
-        Instantiate(monster, Vector3.zero, Quaternion.identity);
+        playerChar = character;
     }
 }

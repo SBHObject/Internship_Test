@@ -11,20 +11,11 @@ public class EnemyIdleState : State
 
     public override void OnEnter()
     {
-        Debug.Log("대기상태");
         enemy.rb.velocity = Vector2.zero;
-    }
-
-    public override void OnUpdate(float deltaTime)
-    {
-        if(GamePlayManager.Instance.playerChar.IsAlive == true)
-        {
-            stateMachine.ChangeState(stateMachine.ChaseState);
-        }
     }
 
     public override void OnExit()
     {
-        enemy.SetTarget();
+        
     }
 }

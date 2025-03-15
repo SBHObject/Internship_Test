@@ -19,7 +19,7 @@ public class Enemy : ObjectPoolable, IDamageable
     private BoxCollider2D monsterCollider;
 
     //공격대상 관련 필드
-    public PlayerCharacter Player { get; private set; }
+    public PlayerCharacter Player => GamePlayManager.Instance.playerChar;
     public float ToPlayerDistance { get; private set; }
     public Vector2 ToPlayerDir { get; private set; }
 
@@ -42,8 +42,7 @@ public class Enemy : ObjectPoolable, IDamageable
 
     private void Start()
     {
-        if (GamePlayManager.Instance.playerChar == null) return;
-        Player = GamePlayManager.Instance.playerChar;
+        if (GamePlayManager.Instance.IsGameStart == false) return;
         CheckDistance();
     }
 
@@ -65,6 +64,7 @@ public class Enemy : ObjectPoolable, IDamageable
     private void FixedUpdate()
     {
         stateMachine.FixedUpdate();
+
         if (rb.velocity.x > 0)
         {
             Sprite.flipX = false;
@@ -87,11 +87,6 @@ public class Enemy : ObjectPoolable, IDamageable
 
     }
 
-    public void SetTarget()
-    {
-        Player = GamePlayManager.Instance.playerChar;
-    }
-
     public void TakeDamage(float damage)
     {
         //체력이 0보다 작아지면 사망처리
@@ -104,24 +99,29 @@ public class Enemy : ObjectPoolable, IDamageable
     //오브젝트풀에서 꺼내기
     public override void GetObject()
     {
-        if (GamePlayManager.Instance.playerChar == null) return;
         Status.SetMonsterStatus();
-        stateMachine.ChangeState(stateMachine.ChaseState);
         gameObject.SetActive(true);
+    }
+
+    public override void SetPosition(Vector2 vector)
+    {
+        base.SetPosition(vector);
+        CheckDistance();
+
+        stateMachine.ChangeState(stateMachine.ChaseState);
+
+        rb.WakeUp();
+    }
+
+    public override void ReleaseObject()
+    {
+        rb.Sleep();
+        base.ReleaseObject();
+        stateMachine.ChangeState(stateMachine.IdelState);
     }
 
     public void DropItem()
     {
-        List<ItemObject> list = GamePlayManager.Instance.DropManager.DecideDropItem(Data.DropItem);
-
-        for (int i = 0; i < list.Count; i++)
-        {
-            float rand = Random.Range(-0.3f, 0.3f);
-            rand = Mathf.Floor(rand * 100f) / 100f;
-            Vector2 dropPos = new Vector2(dropPosition.position.x + rand, dropPosition.position.y + rand);
-
-            list[i].SetPosition(dropPos);
-            list[i].GetObject();
-        }
+        GamePlayManager.Instance.DropManager.DecideDropItem(Data.DropItem, dropPosition.position);
     }
 }

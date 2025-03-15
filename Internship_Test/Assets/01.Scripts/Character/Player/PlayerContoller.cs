@@ -38,7 +38,7 @@ public class PlayerContoller : MonoBehaviour
             sprite.flipX = true;
             IsFlip = true;
         }
-        else
+        else if(value.x > 0)
         {
             sprite.flipX = false;
             IsFlip = false;

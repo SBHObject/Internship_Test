@@ -10,12 +10,6 @@ public class EnemyChaseState : State
 
     public override void OnEnter()
     {
-        if(enemy.Player == null)
-        {
-            stateMachine.ChangeState(stateMachine.IdelState);
-        }
-
-        Debug.Log("추적 진입");
         enemy.CheckDistance();
     }
 
@@ -31,7 +25,6 @@ public class EnemyChaseState : State
 
     public override void OnExit()
     {
-        Debug.Log("추적 종료");
         enemy.rb.velocity = Vector2.zero;
     }
 
@@ -46,6 +39,6 @@ public class EnemyChaseState : State
 
     private void MoveEnemy()
     {
-        enemy.rb.velocity = enemy.ToPlayerDir.normalized * enemy.Data.MoveSpeed * 2;
+        enemy.rb.velocity = 2 * enemy.Data.MoveSpeed * enemy.ToPlayerDir.normalized;
     }
 }

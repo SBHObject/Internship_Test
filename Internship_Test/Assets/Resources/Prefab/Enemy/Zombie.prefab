@@ -273,14 +273,14 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5903551298477234532}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -306,6 +306,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 1fdcea1ffd88fd34ca20cb7220f95a59, type: 2}
   sprite: {fileID: 536698981433597434}
+  dropPosition: {fileID: 0}
   attackCollider: {fileID: 4020731888288189753}
 --- !u!61 &8791911252107842813
 BoxCollider2D:

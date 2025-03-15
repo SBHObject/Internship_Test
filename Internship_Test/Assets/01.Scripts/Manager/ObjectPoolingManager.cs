@@ -19,32 +19,47 @@ public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
 
     private ObjectPoolable objectToCreate;
 
-    private void Start()
-    {
-        CreateMonsterPool();
-    }
+    private readonly Vector2 createPosition = new Vector2(20f, 20f);
 
     //오브젝트풀에서 꺼내기
-    public ObjectPoolable Get(string poolKey)
+    public ObjectPoolable GetFromPool(string poolKey, Vector2 vector)
     {
         if(!poolDictinary.ContainsKey(poolKey))
         {
             return null;
         }
 
-        return poolDictinary[poolKey].Get();
+        var returnObject = poolDictinary[poolKey].Get();
+        returnObject?.SetPosition(vector);
+
+        return returnObject;
     }
 
-    public void CreateMonsterPool()
+    //오브젝트풀에 넣기
+    public void ReleaseToPool(string poolKey, ObjectPoolable poolObject)
     {
-        var monsters = ResourceManager.Instance.LoadAllResources<Enemy>(EMajorType.Prefab, ESubType.Enemy);
-
-        for(int i = 0; i < monsters.Count; i++)
+        if(poolDictinary.ContainsKey(poolKey))
         {
-            CreatePool(monsters[i], monsterPoolCount, monsterPoolCount);
+            poolDictinary[poolKey].Release(poolObject);
         }
     }
 
+    //몬스터 풀 생성
+    public List<string> CreateMonsterPool()
+    {
+        var monsters = ResourceManager.Instance.LoadAllResources<Enemy>(EMajorType.Prefab, ESubType.Enemy);
+
+        List<string> returnKey = new List<string>();
+        for(int i = 0; i < monsters.Count; i++)
+        {
+            CreatePool(monsters[i], monsterPoolCount, monsterPoolCount);
+            returnKey.Add(monsters[i].gameObject.name);
+        }
+
+        return returnKey;
+    }
+
+    //아이템 풀 생성
     public void CreateItemPool()
     {
         var items = ResourceManager.Instance.LoadAllResources<ItemObject>(EMajorType.Prefab, ESubType.Item);
@@ -84,16 +99,18 @@ public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
         for(int i = 0; i < defaultCount; i++)
         {
             ObjectPoolable instance = newPool.Get();
+            instance.SetKey(poolObject.gameObject.name);
+            instance.SetPosition(createPosition);
             tempList.Add(instance);
         }
 
         foreach(var instance in tempList)
         {
-            instance.ReleaseObject();
+            ReleaseToPool(poolObject.gameObject.name, instance);
         }
     }
 
-    //오브젝트 풀에 들어가는 오브젝트 생성
+    //오브젝트 풀에 들어가는 오브젝트 생성시 작동
     private ObjectPoolable CreatePoolObject()
     {
         if (createdObjectCount[objectToCreate.gameObject.name] >= poolMaxCount[objectToCreate.gameObject.name])
@@ -116,13 +133,14 @@ public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
     //풀에서 오브젝트 꺼내기
     private void OnGetPoolObject(ObjectPoolable poolObject)
     {
-        poolObject.GetObject();
+        poolObject?.GetObject();
     }
 
     //풀에 오브젝트 넣기
     private void OnReleasePoolObject(ObjectPoolable poolObject)
     {
-        poolObject.ReleaseObject();
+        poolObject?.SetPosition(createPosition);
+        poolObject?.ReleaseObject();
     }
 
     //풀 오브젝트 파괴

@@ -6,6 +6,9 @@ public class ItemDropManager
 {
     private Dictionary<int, int> unlockLevels = new Dictionary<int, int>();
 
+    private readonly int expID = 30000;
+    private readonly int dropFactor = 4;
+
     public ItemDropManager()
     {
         ObjectPoolingManager.Instance.CreateItemPool();
@@ -17,7 +20,7 @@ public class ItemDropManager
         }
     }
 
-    public List<ItemObject> DecideDropItem(List<int> dropTable)
+    public void DecideDropItem(List<int> dropTable, Vector2 dropPos)
     {
         List<int> exp = new List<int>();
         List<int> other = new List<int>();
@@ -34,33 +37,41 @@ public class ItemDropManager
             }
         }
 
+        //랜덤 드롭 결정
         int randomNum = Random.Range(1, 13);
 
-        List<ItemObject> dropItems = new List<ItemObject>();
-        dropItems.Add((ItemObject)ObjectPoolingManager.Instance.Get(ExpDrop(randomNum, exp.Count).ToString()));
+        //경험치
+        ObjectPoolingManager.Instance.GetFromPool(ExpDrop(randomNum, exp.Count).ToString(), SetDropPosition(dropPos));
         
+        //경험치 이외의 아이템
         if(DropOther(randomNum))
         {
             int target = randomNum % other.Count;
             if (unlockLevels[other[target]] >= GamePlayManager.Instance.playerChar.Status.Level)
             {
-                dropItems.Add((ItemObject)ObjectPoolingManager.Instance.Get(other[target].ToString()));
+                ObjectPoolingManager.Instance.GetFromPool(other[target].ToString(), SetDropPosition(dropPos));
             }
         }
+    }
 
-        return dropItems;
+    //드롭 위치 조정
+    private Vector2 SetDropPosition(Vector2 basePos)
+    {
+        float rand = Random.Range(-0.3f, 0.3f);
+        rand = Mathf.Floor(rand * 10f) / 10f;
+        return new Vector2(basePos.x + rand, basePos.y + rand);
     }
 
     private int ExpDrop(int randNum , int listCount)
     {
         int target = randNum % listCount;
 
-        return 30000 + target;
+        return expID + target;
     }
 
     private bool DropOther(int randNum)
     {
-        if(randNum <= 4)
+        if(randNum <= dropFactor)
         {
             return true;
         }
