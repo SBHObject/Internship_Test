@@ -39,7 +39,6 @@ public class Enemy : ObjectPoolable, IDamageable
     private void Start()
     {
         Player = GamePlayManager.Instance.playerChar;
-        ActiveMonster();
         CheckDistance();
     }
 
@@ -77,6 +76,7 @@ public class Enemy : ObjectPoolable, IDamageable
         ToPlayerDistance = ToPlayerDir.sqrMagnitude;
     }
 
+    //공격 시도(원거리, 근거리 별개 구현 -> 자식 클래스)
     public virtual void TryAttack()
     {
 
@@ -85,11 +85,6 @@ public class Enemy : ObjectPoolable, IDamageable
     public void SetTarget()
     {
         Player = GamePlayManager.Instance.playerChar;
-    }
-
-    private void ActiveMonster()
-    {
-        stateMachine.ChangeState(stateMachine.ChaseState);
     }
 
     public void TakeDamage(float damage)
@@ -101,8 +96,11 @@ public class Enemy : ObjectPoolable, IDamageable
         }
     }
 
+    //오브젝트풀에서 꺼내기
     public override void GetObject()
     {
-        //TODO : 오브젝트풀 생성 구현
+        Status.SetMonsterStatus();
+        stateMachine.ChangeState(stateMachine.ChaseState);
+        gameObject.SetActive(true);
     }
 }

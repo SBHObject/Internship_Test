@@ -4,8 +4,23 @@ using UnityEngine;
 
 public class EnemyMelee : Enemy
 {
+    [SerializeField]
+    private MeleeAttackCollider attackCollider;
+
     public override void TryAttack()
     {
         Debug.Log("АјАн");
+        attackCollider.gameObject.SetActive(true);
+    }
+
+    public void EndAttack()
+    {
+        attackCollider.gameObject.SetActive(false);
+    }
+
+    public override void GetObject()
+    {
+        base.GetObject();
+        attackCollider.SetMeleeDamage(Status.AttackDamage);
     }
 }
