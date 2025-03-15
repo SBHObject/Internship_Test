@@ -60,14 +60,18 @@ public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
     }
 
     //아이템 풀 생성
-    public void CreateItemPool()
+    public List<string> CreateItemPool()
     {
         var items = ResourceManager.Instance.LoadAllResources<ItemObject>(EMajorType.Prefab, ESubType.Item);
 
+        List<string> returnKey = new List<string>();
         for(int i = 0; i < items.Count; i++)
         {
             CreatePool(items[i], itemPoolCount, 200);
+            returnKey.Add(items[i].gameObject.name);
         }
+
+        return returnKey;
     }
 
     private void CreatePool(ObjectPoolable poolObject, int defaultCount, int maxCount)

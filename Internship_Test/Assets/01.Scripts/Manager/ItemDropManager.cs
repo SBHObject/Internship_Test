@@ -40,8 +40,11 @@ public class ItemDropManager
         //랜덤 드롭 결정
         int randomNum = Random.Range(1, 13);
 
-        //경험치
-        ObjectPoolingManager.Instance.GetFromPool(ExpDrop(randomNum, exp.Count).ToString(), SetDropPosition(dropPos));
+        if (randomNum >= 6)
+        {
+            //경험치
+            ObjectPoolingManager.Instance.GetFromPool(ExpDrop(randomNum, exp.Count).ToString(), SetDropPosition(dropPos));
+        }
         
         //경험치 이외의 아이템
         if(DropOther(randomNum))
@@ -49,7 +52,9 @@ public class ItemDropManager
             int target = randomNum % other.Count;
             if (unlockLevels[other[target]] >= GamePlayManager.Instance.playerChar.Status.Level)
             {
-                ObjectPoolingManager.Instance.GetFromPool(other[target].ToString(), SetDropPosition(dropPos));
+                ChestItem chest = (ChestItem)ObjectPoolingManager.Instance.GetFromPool("Chest", SetDropPosition(dropPos));
+                ItemDataSO data = ResourceManager.Instance.LoadResource<ItemDataSO>(other[target].ToString(), EMajorType.Data, ESubType.Item);
+                chest.SetItemData(data);
             }
         }
     }
