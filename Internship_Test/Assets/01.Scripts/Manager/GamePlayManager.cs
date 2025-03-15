@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class GamePlayManager : Singleton<GamePlayManager>
 {
+    //관리되는 매니저
+    public ItemDropManager DropManager { get; private set; }
+
     public PlayerCharacter playerChar { get; private set; }
 
     public event Action OnGameStartEvent;
@@ -18,6 +21,8 @@ public class GamePlayManager : Singleton<GamePlayManager>
     protected override void Awake()
     {
         base.Awake();
+
+        DropManager = new ItemDropManager();
 
         IsGameStart = false;
         GamePlayTime = 0;

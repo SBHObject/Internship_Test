@@ -5,7 +5,7 @@ using UnityEngine.Pool;
 
 public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
 {
-    //몬스터 풀
+    //오브젝트 풀
     public Dictionary<string, IObjectPool<ObjectPoolable>> poolDictinary = new Dictionary<string, IObjectPool<ObjectPoolable>>();
     //풀링 오브젝트의 부모 오브젝트
     private Dictionary<string, GameObject> poolPerentsDictinary = new Dictionary<string, GameObject>();
@@ -15,6 +15,7 @@ public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
     private Dictionary<string, int> createdObjectCount = new Dictionary<string, int>();
 
     private readonly int monsterPoolCount = 10;
+    private readonly int itemPoolCount = 10;
 
     private ObjectPoolable objectToCreate;
 
@@ -44,6 +45,16 @@ public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
         }
     }
 
+    public void CreateItemPool()
+    {
+        var items = ResourceManager.Instance.LoadAllResources<ItemObject>(EMajorType.Prefab, ESubType.Item);
+
+        for(int i = 0; i < items.Count; i++)
+        {
+            CreatePool(items[i], itemPoolCount, 200);
+        }
+    }
+
     private void CreatePool(ObjectPoolable poolObject, int defaultCount, int maxCount)
     {
         if (poolDictinary.ContainsKey(poolObject.gameObject.name))
@@ -67,6 +78,19 @@ public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
         poolDictinary.Add(poolObject.gameObject.name, newPool);
         poolMaxCount.Add(poolObject.gameObject.name, maxCount);
         createdObjectCount.Add(poolObject.gameObject.name, 0);
+
+        //기본값만큼 오브젝트 생성
+        List<ObjectPoolable> tempList = new List<ObjectPoolable>();
+        for(int i = 0; i < defaultCount; i++)
+        {
+            ObjectPoolable instance = newPool.Get();
+            tempList.Add(instance);
+        }
+
+        foreach(var instance in tempList)
+        {
+            instance.ReleaseObject();
+        }
     }
 
     //오브젝트 풀에 들어가는 오브젝트 생성

@@ -27,6 +27,10 @@ public class Enemy : ObjectPoolable, IDamageable
     private float distanceCheckTime = 0.5f;
     private float checkTimer = 0;
 
+    //아이템 드롭 위치
+    [SerializeField]
+    private Transform dropPosition;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -38,6 +42,7 @@ public class Enemy : ObjectPoolable, IDamageable
 
     private void Start()
     {
+        if (GamePlayManager.Instance.playerChar == null) return;
         Player = GamePlayManager.Instance.playerChar;
         CheckDistance();
     }
@@ -99,8 +104,24 @@ public class Enemy : ObjectPoolable, IDamageable
     //오브젝트풀에서 꺼내기
     public override void GetObject()
     {
+        if (GamePlayManager.Instance.playerChar == null) return;
         Status.SetMonsterStatus();
         stateMachine.ChangeState(stateMachine.ChaseState);
         gameObject.SetActive(true);
+    }
+
+    public void DropItem()
+    {
+        List<ItemObject> list = GamePlayManager.Instance.DropManager.DecideDropItem(Data.DropItem);
+
+        for (int i = 0; i < list.Count; i++)
+        {
+            float rand = Random.Range(-0.3f, 0.3f);
+            rand = Mathf.Floor(rand * 100f) / 100f;
+            Vector2 dropPos = new Vector2(dropPosition.position.x + rand, dropPosition.position.y + rand);
+
+            list[i].SetPosition(dropPos);
+            list[i].GetObject();
+        }
     }
 }

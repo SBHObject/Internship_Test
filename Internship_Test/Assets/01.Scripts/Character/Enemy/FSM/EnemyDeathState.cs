@@ -10,7 +10,9 @@ public class EnemyDeathState : State
 
     public override void OnEnter()
     {
+        enemy.DropItem();
         //오브젝트풀에 넣기
+
     }
 
     public override void OnExit()
