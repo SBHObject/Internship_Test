@@ -16,7 +16,7 @@ MonoBehaviour:
   Name: "\uC0BD"
   Description: "\uC0BD \uC785\uB2C8\uB2E4\u2026\uC788\uB294\uAC8C \uC774\uAC83\uBFD0\uC774\uB77C\uBA74
     \uC5B4\uCA54\uC218 \uC5C6\uAD70\uC694"
-  UnlockLevel: 0
+  UnlockLevel: 1
   MaxHP: 0
   MaxHpMul: 0
   MaxMp: 0

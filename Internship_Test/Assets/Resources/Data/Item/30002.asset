@@ -15,7 +15,7 @@ MonoBehaviour:
   ItemID: 30002
   Name: "\uACBD\uD5D8\uCE58(\uC911)"
   Description: "\uC801\uB2F9\uD55C\uB7C9\uC758 \uACBD\uD5D8\uCE58 \uC785\uB2C8\uB2E4."
-  UnlockLevel: 0
+  UnlockLevel: 1
   MaxHP: 0
   MaxHpMul: 0
   MaxMp: 0

@@ -16,7 +16,7 @@ MonoBehaviour:
   Name: "\uC1E0\uC2A4\uB791"
   Description: "\uB18D\uAE30\uAD6C\uC9C0\uB9CC \uADF8\uB798\uB3C4 \uC2F8\uC6B8\uB54C
     \uC4F8 \uC218 \uC788\uC744\uAC83 \uAC19\uC2B5\uB2C8\uB2E4."
-  UnlockLevel: 0
+  UnlockLevel: 3
   MaxHP: 0
   MaxHpMul: 0
   MaxMp: 0
