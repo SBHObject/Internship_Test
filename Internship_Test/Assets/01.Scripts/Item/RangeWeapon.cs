@@ -25,9 +25,10 @@ public class RangeWeapon : EquipedWeapon
     {
         ProjectileBase bullet = (ProjectileBase)ObjectPoolingManager.Instance.GetFromPool(bulletKey, firePoint.position);
 
+        bullet.Pool = bullet;
         bullet.SetPosition(firePoint.position);
         bullet.transform.rotation = weaponPivot;
-        bullet.SetData(damage);
+        bullet.SetData(damage , true);
     }
 
 

@@ -22,7 +22,6 @@ public class EnemyAttackState : State
 
         if(enemy.Data.AttackSpeed <= attackDelay)
         {
-            enemy.TryAttack();
             enemy.Animator.SetTrigger("Attack");
             attackDelay = 0;
         }

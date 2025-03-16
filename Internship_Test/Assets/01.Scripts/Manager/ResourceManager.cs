@@ -18,6 +18,7 @@ public enum ESubType
     Map,
     Weapon,
     Bullet,
+    Sprite,
     None
 }
 
@@ -79,7 +80,6 @@ public class ResourceManager : PersistentSingleton<ResourceManager>
 
                 resourcePool.Add(key.ToString(), obj);
 
-                returnResource.Add((T)obj);
                 keyList.Add(key.ToString());
             }
 

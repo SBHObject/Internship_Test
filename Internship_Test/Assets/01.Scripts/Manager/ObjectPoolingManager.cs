@@ -30,8 +30,13 @@ public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
             return null;
         }
 
+        if (poolDictinary[poolKey].CountInactive == 0)
+        {
+            return null;
+        }
+
+        
         var returnObject = poolDictinary[poolKey].Get();
-        returnObject.GetObject();
         
         if (returnObject != null)
         {
@@ -63,6 +68,8 @@ public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
         {
             CreatePool(monsters[i], monsterPoolCount, monsterPoolCount);
             returnKey.Add(monsters[i].gameObject.name);
+
+            UIManager.Instance.infoUI.CreateMonsterInfoSlot(monsters[i].gameObject.name);
         }
 
         return returnKey;

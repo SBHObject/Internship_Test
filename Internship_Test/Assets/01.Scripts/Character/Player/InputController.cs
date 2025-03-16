@@ -11,6 +11,8 @@ public class InputController : MonoBehaviour
 
     public event Action OnInteracteInput;
     public event Action OnEscapeInput;
+    public event Action OnNumber1Input;
+    public event Action OnNumber2Input;
 
     public void MoveInput(InputAction.CallbackContext context)
     {
@@ -32,4 +34,20 @@ public class InputController : MonoBehaviour
             OnEscapeInput?.Invoke();
         }
     }
+
+    public void Number1Input(InputAction.CallbackContext context)
+    {
+        if(context.started)
+        {
+            OnNumber1Input?.Invoke();
+        }
+    }
+
+    public void Number2Input(InputAction.CallbackContext context)
+    {
+        if(context.started)
+        {
+            OnNumber2Input?.Invoke();
+        }
+    }    
 }

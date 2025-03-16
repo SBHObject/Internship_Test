@@ -11,6 +11,8 @@ public class ProjectileBase : ObjectPoolable
 
     private readonly float shotPower = 10f;
 
+    private bool canAttack = false;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -29,18 +31,22 @@ public class ProjectileBase : ObjectPoolable
 
     public override void ReleaseObject()
     {
+        canAttack = false;
         rb.velocity = Vector3.zero;
         rb.Sleep();
         base.ReleaseObject();
     }
 
-    public void SetData(float _damage)
+    public void SetData(float _damage, bool active)
     {
         damage = _damage;
+        canAttack = active;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (canAttack == false) return;
+
         if(collision.TryGetComponent(out IDamageable damageable))
         {
             damageable.TakeDamage(damage);

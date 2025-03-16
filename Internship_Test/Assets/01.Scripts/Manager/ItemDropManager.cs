@@ -40,7 +40,7 @@ public class ItemDropManager
         //랜덤 드롭 결정
         int randomNum = Random.Range(1, 13);
 
-        if (randomNum >= 6)
+        if (randomNum >= 2)
         {
             //경험치
             ObjectPoolingManager.Instance.GetFromPool(ExpDrop(randomNum, exp.Count).ToString(), SetDropPosition(dropPos));

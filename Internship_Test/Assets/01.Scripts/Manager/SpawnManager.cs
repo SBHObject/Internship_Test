@@ -42,7 +42,7 @@ public class SpawnManager
         {
             int rand = Random.Range(0, monsterSpawnPoints.Count);
 
-            ObjectPoolable poolObject = ObjectPoolingManager.Instance.GetFromPool(monsterKey[i], monsterSpawnPoints[rand].position);
+            var created = ObjectPoolingManager.Instance.GetFromPool(monsterKey[i], monsterSpawnPoints[rand].position);
         }
 
         spawnTimer = 0;

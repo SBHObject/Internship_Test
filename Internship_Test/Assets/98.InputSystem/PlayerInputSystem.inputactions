@@ -1,5 +1,5 @@
 {
-    "name": "PlayerInput",
+    "name": "PlayerInputSystem",
     "maps": [
         {
             "name": "Player",
@@ -27,6 +27,24 @@
                     "name": "Interaction",
                     "type": "Button",
                     "id": "7b5f838e-20d2-4e33-9d74-adbb4245010e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Press1",
+                    "type": "Button",
+                    "id": "29038593-42c5-4214-a444-5646c5fca6fd",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Press2",
+                    "type": "Button",
+                    "id": "33356af6-a93c-4f1c-b55f-9cc0b29d30cc",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -108,6 +126,28 @@
                     "processors": "",
                     "groups": "Keyboard",
                     "action": "Interaction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cb9c1e92-ce68-4a82-ba07-26bbf57f6583",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Press1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b3dc8404-6a8c-4466-afde-f8b434c46441",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Press2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

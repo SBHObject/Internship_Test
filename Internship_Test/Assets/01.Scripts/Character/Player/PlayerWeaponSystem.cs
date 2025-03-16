@@ -35,8 +35,11 @@ public class PlayerWeaponSystem : MonoBehaviour
 
     private float attackTimer = 0;
 
+    private PlayerCharacter player;
+
     public void Awake()
     {
+        player = GetComponent<PlayerCharacter>();
         LoadWeapons();
 
         for(int i = 0; i < 6; i++)
@@ -45,8 +48,16 @@ public class PlayerWeaponSystem : MonoBehaviour
         }
 
         AddWeapon(shovel);
+        AddWeapon(handgun);
 
         EquipWeapon(shovel);
+    }
+
+    private void Start()
+    {
+        player.InputController.OnNumber1Input += Input1;
+        player.InputController.OnNumber2Input += Input2;
+
     }
 
     private void Update()
@@ -76,6 +87,8 @@ public class PlayerWeaponSystem : MonoBehaviour
             var created = Instantiate(weapons[i], weaponPosition);
             playerWeapons.Add(created.GetItemData().ItemID, created);
             created.gameObject.SetActive(false);
+
+            UIManager.Instance.weaponsInfoUI.CreateWeaponIcon(created.GetItemData().ItemID);
         }
     }
 
@@ -102,6 +115,16 @@ public class PlayerWeaponSystem : MonoBehaviour
 
         currentWeapon = weaponId;
         playerWeapons[currentWeapon].gameObject.SetActive(true);
+    }
+
+    public void Input1()
+    {
+        ChangeWeapon(1);
+    }
+
+    public void Input2()
+    {
+        ChangeWeapon(4);
     }
 
     public void ChangeWeapon(int index)
