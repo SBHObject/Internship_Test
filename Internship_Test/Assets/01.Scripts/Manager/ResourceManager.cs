@@ -17,6 +17,7 @@ public enum ESubType
     UI,
     Map,
     Weapon,
+    Bullet,
     None
 }
 
@@ -60,21 +61,35 @@ public class ResourceManager : PersistentSingleton<ResourceManager>
         stringBuilder.Append(majorType);
         stringBuilder.Append(subType == ESubType.None ? "" : $"/{subType}");
 
-        object[] loaded = Resources.LoadAll(stringBuilder.ToString(), typeof(T));
-
         List<T> returnResource = new List<T>();
 
-        foreach( object obj in loaded )
+        if (!resourcePool.ContainsKey(stringBuilder.ToString()))
         {
-            StringBuilder key = new StringBuilder();
-            key.Append(stringBuilder.ToString());
-            key.Append($"/");
-            key.Append(obj.ToString());
-            key.Replace($" ({obj.GetType()})", "");
+            List<string> keyList = new List<string>();
+            
+            object[] loaded = Resources.LoadAll(stringBuilder.ToString(), typeof(T));
 
-            resourcePool.Add(key.ToString(), obj);
+            foreach (object obj in loaded)
+            {
+                StringBuilder key = new StringBuilder();
+                key.Append(stringBuilder.ToString());
+                key.Append($"/");
+                key.Append(obj.ToString());
+                key.Replace($" ({obj.GetType()})", "");
 
-            returnResource.Add((T)obj);
+                resourcePool.Add(key.ToString(), obj);
+
+                returnResource.Add((T)obj);
+                keyList.Add(key.ToString());
+            }
+
+            resourcePool.Add(stringBuilder.ToString(), keyList);
+        }
+
+        List<string> getkey = (List<string>)resourcePool[stringBuilder.ToString()];
+        for(int i = 0; i < getkey.Count; i++)
+        {
+            returnResource.Add((T)resourcePool[getkey[i]]);
         }
 
         return returnResource;

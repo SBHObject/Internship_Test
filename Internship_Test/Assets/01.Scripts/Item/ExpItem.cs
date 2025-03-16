@@ -6,8 +6,6 @@ public class ExpItem : DropItem
 {
     private float expAmount;
 
-    
-
     public override void GetObject()
     {
         base.GetObject();
@@ -15,9 +13,9 @@ public class ExpItem : DropItem
         expAmount = itemData.Exp + itemData.Exp * itemData.ExpMul * GamePlayManager.Instance.StatusMultiply;
     }
 
-    public override void ItemEffect()
+    public override void ItemEffect(PlayerCharacter player)
     {
-        GamePlayManager.Instance.playerChar.Status.GetExp(expAmount);
+        player.Status.GetExp(expAmount);
         ObjectPoolingManager.Instance.ReleaseToPool(Key, Pool);
     }
 }

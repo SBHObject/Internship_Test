@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Enemy : ObjectPoolable, IDamageable
 {
@@ -36,6 +37,12 @@ public class Enemy : ObjectPoolable, IDamageable
 
     private Coroutine hitAni;
     private WaitForSeconds aniTime = new WaitForSeconds(0.2f);
+
+    //체력바
+    [SerializeField]
+    private Image healthBar;
+
+    private WaitForSeconds deathCoroutine = new WaitForSeconds(2f);
 
     private void Awake()
     {
@@ -104,18 +111,20 @@ public class Enemy : ObjectPoolable, IDamageable
         }
 
         //체력이 0보다 작아지면 사망처리
-        if(Status.TakeDamage(damage) <= 0)
+        if (Status.TakeDamage(damage) <= 0)
         {
-            isDead = true;
-            MonsterCollider.enabled = false;
-            stateMachine.ChangeState(stateMachine.DeathState);
+            StartCoroutine(OnDeath());
         }
+
+        healthBar.fillAmount = Status.CurrentHp / Status.MaxHp;
     }
 
     //오브젝트풀에서 꺼내기
     public override void GetObject()
     {
+        sprite.color = Color.white;
         Status.SetMonsterStatus();
+        healthBar.fillAmount = Status.CurrentHp / Status.MaxHp;
         gameObject.SetActive(true);
     }
 
@@ -131,11 +140,7 @@ public class Enemy : ObjectPoolable, IDamageable
 
     public override void ReleaseObject()
     {
-        rb.Sleep();
         base.ReleaseObject();
-        MonsterCollider.enabled = true;
-        isDead = false;
-        stateMachine.ChangeState(stateMachine.IdleState);
     }
 
     public void DropItem()
@@ -146,7 +151,27 @@ public class Enemy : ObjectPoolable, IDamageable
     private IEnumerator HitAnimation()
     {
         Animator.SetBool("IsHit", true);
+
         yield return aniTime;
+
         Animator.SetBool("IsHit", false);
+        hitAni = null;
+    }
+
+    private IEnumerator OnDeath()
+    {
+        isDead = true;
+        MonsterCollider.enabled = false;
+        stateMachine.ChangeState(stateMachine.DeathState);
+        Animator.SetBool("IsDead", true);
+
+        yield return deathCoroutine;
+
+        rb.Sleep();
+        MonsterCollider.enabled = true;
+        isDead = false;
+        stateMachine.ChangeState(stateMachine.IdleState);
+        Animator.SetBool("IsDead", false);
+        ObjectPoolingManager.Instance.ReleaseToPool(Key, Pool);
     }
 }

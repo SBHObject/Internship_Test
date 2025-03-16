@@ -353,6 +353,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: c5d55648087505345b318f5cfd640080, type: 2}
+  weaponSpriteRender: {fileID: 3779114287488623676}
   attackCollider: {fileID: 62837167436095412}
   attackRangeCollider: {fileID: 6631517952455556984}
   contactFilter:

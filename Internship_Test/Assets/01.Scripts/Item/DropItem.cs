@@ -5,5 +5,5 @@ using UnityEngine;
 public abstract class DropItem : ItemObject
 {
     //æ∆¿Ã≈€ »πµÊΩ√ »ø∞˙
-    public abstract void ItemEffect();
+    public abstract void ItemEffect(PlayerCharacter player);
 }

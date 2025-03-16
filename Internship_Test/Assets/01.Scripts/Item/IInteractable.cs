@@ -4,5 +4,7 @@ using UnityEngine;
 
 public interface IInteractable
 {
-    public void OnInteracte();
+    public void OnInteracte(PlayerCharacter player);
+    public void ShowInteracteEffect();
+    public void HideInteracteEffect();
 }

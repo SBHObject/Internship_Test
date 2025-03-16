@@ -21,8 +21,6 @@ public class MeleeAttackCollider : MonoBehaviour
             return;
         }
 
-        Debug.Log(collision);
-
         if(collision.TryGetComponent(out IDamageable character))
         {
             alreadyCheck.Add(collision);

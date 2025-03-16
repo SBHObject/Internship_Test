@@ -19,12 +19,16 @@ public class GamePlayManager : Singleton<GamePlayManager>
     //Ω∫≈› πË¿≤
     public int StatusMultiply { get; private set; }
 
+    public List<string> BulletKey { get; private set; }
+
     protected override void Awake()
     {
         base.Awake();
 
         DropManager = new ItemDropManager();
         SpawnManager = new SpawnManager();
+
+        BulletKey = ObjectPoolingManager.Instance.CreateBulletPool();
 
         IsGameStart = false;
         GamePlayTime = 0;

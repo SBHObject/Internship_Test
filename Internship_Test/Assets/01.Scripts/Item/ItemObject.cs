@@ -11,4 +11,9 @@ public class ItemObject : ObjectPoolable
     {
         gameObject.SetActive(true);
     }
+
+    public ItemDataSO GetItemData()
+    {
+        return itemData;
+    }
 }

@@ -2,21 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChestItem : DropItem, IInteractable
+public class ChestItem : ItemObject, IInteractable
 {
+    public GameObject effect;
+
     public void SetItemData(ItemDataSO dataSO)
     {
         itemData = dataSO;
         GetObject();
     }
 
-    public override void ItemEffect()
+    public void OnInteracte(PlayerCharacter player)
     {
-        //TODO : 무기 획득, 상자 열리는 연출
+        player.WeaponSystem.AddWeapon(itemData.ItemID);
+        ObjectPoolingManager.Instance.ReleaseToPool(Key, Pool);
     }
 
-    public void OnInteracte()
+    public void ShowInteracteEffect()
     {
-        ItemEffect();
+        effect.SetActive(true);
+    }
+
+    public void HideInteracteEffect()
+    {
+        effect.SetActive(false);
     }
 }

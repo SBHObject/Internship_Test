@@ -1,6 +1,8 @@
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TreeEditor;
 using UnityEditor;
 using UnityEngine;
 
@@ -24,6 +26,15 @@ public class PlayerWeaponSystem : MonoBehaviour
 
     public event Action<int, int> OnAddWeapon;
 
+    private Transform target;
+    private Vector2 targetDir;
+    [SerializeField]
+    private Transform weaponPivot;
+    private float timer = 0;
+    private readonly float searchTime = 0.2f;
+
+    private float attackTimer = 0;
+
     public void Awake()
     {
         LoadWeapons();
@@ -34,7 +45,26 @@ public class PlayerWeaponSystem : MonoBehaviour
         }
 
         AddWeapon(shovel);
+
         EquipWeapon(shovel);
+    }
+
+    private void Update()
+    {
+        timer += Time.deltaTime;
+        attackTimer += Time.deltaTime;
+
+        if (searchTime < timer)
+        {
+            TargetSearch();
+            timer = 0;
+        }
+
+        if(target != null)
+        {
+            RotateWeapon(targetDir);
+            AttackCall();
+        }
     }
 
     public void LoadWeapons()
@@ -44,7 +74,7 @@ public class PlayerWeaponSystem : MonoBehaviour
         for (int i = 0; i < weapons.Count; i++)
         {
             var created = Instantiate(weapons[i], weaponPosition);
-            playerWeapons.Add(10000 + i, created);
+            playerWeapons.Add(created.GetItemData().ItemID, created);
             created.gameObject.SetActive(false);
         }
     }
@@ -60,10 +90,100 @@ public class PlayerWeaponSystem : MonoBehaviour
 
     public void EquipWeapon(int weaponId)
     {
+        if (currentWeapon == weaponId) return;
         if (weaponCount[weaponId] <= 0) return;
 
+        attackTimer = 0;
+
+        if (currentWeapon != 0)
+        {
+            playerWeapons[currentWeapon].gameObject.SetActive(false);
+        }
+
         currentWeapon = weaponId;
-        playerWeapons[weaponId].gameObject.SetActive(true);
+        playerWeapons[currentWeapon].gameObject.SetActive(true);
     }
 
+    public void ChangeWeapon(int index)
+    {
+        int id = GetIdByIndex(index);
+        if(weaponCount[id] > 0)
+        {
+            EquipWeapon(id);
+        }
+    }
+
+    private void TargetSearch()
+    {
+        var targetCol = Physics2D.OverlapCircleAll(transform.position, playerWeapons[currentWeapon].GetItemData().AtkRange, LayerMask.GetMask("Enemy"));
+        float min = float.MaxValue;
+
+        Transform targetMin = null;
+
+        for(int i = 0; i < targetCol.Length; i++)
+        {
+            if (Vector2.SqrMagnitude(targetCol[i].transform.position - transform.position) < min)
+            {
+                targetMin = targetCol[i].transform;
+            }
+        }
+
+        if(targetMin != null)
+        {
+            target = targetMin.transform;
+            targetDir = (targetMin.position - transform.position).normalized;
+        }
+        else
+        {
+            target = null;
+        }
+    }
+
+    private void RotateWeapon(Vector2 dir)
+    {
+        float rotz = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+        playerWeapons[currentWeapon].FlipSprite(Mathf.Abs(rotz) > 90f);
+        weaponPivot.rotation = Quaternion.Euler(0f, 0f, rotz);
+    }
+
+    private void AttackCall()
+    {
+        if(attackTimer >= playerWeapons[currentWeapon].GetItemData().AtkSpeed)
+        {
+            playerWeapons[currentWeapon].DoAttack(weaponPivot.rotation);
+            attackTimer = 0;
+        }
+    }
+
+    private int GetIdByIndex(int index)
+    {
+        int target;
+        switch (index)
+        {
+            case 1:
+                target = shovel;
+                break;
+            case 2:
+                target = rake;
+                break;
+            case 3:
+                target = sickle;
+                break;
+            case 4:
+                target = handgun;
+                break;
+            case 5:
+                target = rifle;
+                break;
+            case 6:
+                target = shotgun;
+                break;
+            default:
+                target = shovel;
+                break;
+        }
+
+        return target;
+    }
 }

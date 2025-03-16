@@ -31,11 +31,13 @@ public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
         }
 
         var returnObject = poolDictinary[poolKey].Get();
+        returnObject.GetObject();
         
         if (returnObject != null)
         {
             returnObject.SetPosition(vector);
             returnObject.Pool = returnObject;
+            returnObject.SetKey(poolKey);
         }
 
         return returnObject;
@@ -46,6 +48,7 @@ public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
     {
         if(poolDictinary.ContainsKey(poolKey))
         {
+            poolObject.ReleaseObject();
             poolDictinary[poolKey].Release(poolObject);
         }
     }
@@ -75,6 +78,21 @@ public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
         {
             CreatePool(items[i], itemPoolCount, 200);
             returnKey.Add(items[i].gameObject.name);
+        }
+
+        return returnKey;
+    }
+
+    //ÃÑ¾Ë Ç® »ý¼º
+    public List<string> CreateBulletPool()
+    {
+        var bullet = ResourceManager.Instance.LoadAllResources<ProjectileBase>(EMajorType.Prefab,ESubType.Bullet);
+
+        List<string> returnKey = new List<string>();
+        for(int i = 0; i < bullet.Count; i++)
+        {
+            CreatePool(bullet[i], 30, 100);
+            returnKey.Add(bullet[i].gameObject.name);
         }
 
         return returnKey;

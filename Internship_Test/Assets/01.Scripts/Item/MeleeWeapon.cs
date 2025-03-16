@@ -11,7 +11,16 @@ public class MeleeWeapon : EquipedWeapon
     [SerializeField]
     private ContactFilter2D contactFilter;
 
-    private float timer = 0f;
+    private Animator animator;
+
+    private int attackHash;
+
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+
+        attackHash = Animator.StringToHash("Attack");
+    }
 
     private void Start()
     {
@@ -19,24 +28,7 @@ public class MeleeWeapon : EquipedWeapon
         attackCollider.SetMeleeDamage(itemData.MaxAtk);
     }
 
-    private void Update()
-    {
-        timer += Time.deltaTime;
-
-        if(itemData.AtkSpeed <= timer)
-        {
-            List<Collider2D> search = new List<Collider2D>();
-            var targets = Physics2D.OverlapCollider(attackRangeCollider, contactFilter, search);
-
-            if (targets > 0)
-            {
-                DoAttack();
-                timer = 0f;
-            }
-        }
-    }
-
-    public override void DoAttack()
+    public override void DoAttack(Quaternion weaponPivot)
     {
         animator.SetTrigger(attackHash);
     }

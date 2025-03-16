@@ -7,8 +7,8 @@ public class PlayerAnimationController : MonoBehaviour
     private Animator animator;
     private PlayerCharacter character;
 
-    private int isDeadHesh = Animator.StringToHash("IsDead");
-    private int isMoveHesh = Animator.StringToHash("IsMove");
+    private readonly int isDeadHesh = Animator.StringToHash("IsDead");
+    private readonly int isMoveHesh = Animator.StringToHash("IsMove");
 
     private void Awake()
     {

@@ -7,6 +7,8 @@ public class EnemyStatus
     private Enemy enemy;
 
     private float maxHp;
+    public float MaxHp { get { return maxHp; } }
+
     public float CurrentHp { get; private set; }
 
     public float AttackDamage { get; private set; }

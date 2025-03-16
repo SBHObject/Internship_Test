@@ -1,22 +1,22 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class EquipedWeapon : ItemObject
 {
-    protected Animator animator;
+    protected float timer = 0f;
 
-    protected int attackHash;
+    [SerializeField]
+    private SpriteRenderer weaponSpriteRender;
 
-    private void Awake()
+    public void FlipSprite(bool flip)
     {
-        animator = GetComponent<Animator>();
-
-        attackHash = Animator.StringToHash("Attack");
+        weaponSpriteRender.flipY = flip;
     }
 
     //공격 구현
-    public abstract void DoAttack();
+    public abstract void DoAttack(Quaternion weaponPivot);
 
     public void ShowWeapon()
     {
